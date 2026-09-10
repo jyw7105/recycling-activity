@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Starting a Recycling Project</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#eef7f0;color:#20352a}
+.app{max-width:900px;margin:auto;padding:18px}
+.card{background:white;border-radius:20px;padding:24px;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+h1{margin-top:0;color:#247a45}
+h2{color:#247a45}
+.progress{height:10px;background:#dce9df;border-radius:10px;margin:12px 0 24px;overflow:hidden}
+.bar{height:100%;background:#4caf72;width:20%;transition:.3s}
+.story{line-height:1.7;background:#f4faf5;padding:16px;border-radius:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.item{padding:14px;background:#f7faf8;border-radius:12px;border:1px solid #dce9df}
+button{border:0;border-radius:12px;padding:12px 18px;background:#287d49;color:white;font-size:16px;cursor:pointer;margin-top:18px}
+button:hover{opacity:.9}
+select{padding:9px;border-radius:8px;border:1px solid #aaa;font-size:15px;max-width:100%}
+.question{margin:18px 0;padding:15px;background:#f7faf8;border-radius:12px}
+.feedback{margin-top:14px;font-weight:bold}
+.hidden{display:none}
+.score{font-size:28px;font-weight:bold;color:#247a45}
+.tip{background:#fff8d8;padding:12px;border-radius:10px;margin-top:14px}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.app{padding:10px}.card{padding:18px}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="card">
+<div id="screen1">
+<h1>♻️ Starting a Recycling Project</h1>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<p>Learn six useful expressions from the story.</p>
+<div class="story">
+<b>A group of students wanted to find out</b> how much waste their school produced each day.
+They decided to <b>set up</b> recycling boxes for paper and plastic.
+They also asked classmates to <b>sort out</b> their waste carefully.
+At first, many students did not <b>pay attention to</b> the recycling signs,
+so the team <b>came up with</b> a simple points game.
+With more students joining the project, the team was able to <b>carry out</b> the plan for an entire month.
+</div>
+<div class="grid" style="margin-top:16px">
+<div class="item"><b>find out</b><br>discover / learn something</div>
+<div class="item"><b>set up</b><br>start or arrange something</div>
+<div class="item"><b>sort out</b><br>separate things into groups</div>
+<div class="item"><b>pay attention to</b><br>watch or listen carefully</div>
+<div class="item"><b>come up with</b><br>think of an idea or plan</div>
+<div class="item"><b>carry out</b><br>do or complete a plan</div>
+</div>
+<div class="tip">💡 Memory tip: These expressions are all useful for describing actions in a project.</div>
+<button onclick="go(2)">Start →</button>
+</div>
+
+<div id="screen2" class="hidden">
+<h2>1. Match the Meaning</h2>
+<p>Choose the expression that matches each meaning.</p>
+<div id="match"></div>
+<button onclick="checkMatch()">Check Answers</button>
+<div id="matchFeedback" class="feedback"></div>
+<button onclick="go(3)">Next →</button>
+</div>
+
+<div id="screen3" class="hidden">
+<h2>2. Choose from Context</h2>
+<div id="context"></div>
+<button onclick="checkContext()">Check Answers</button>
+<div id="contextFeedback" class="feedback"></div>
+<button onclick="go(4)">Next →</button>
+</div>
+
+<div id="screen4" class="hidden">
+<h2>3. Complete the Project</h2>
+<p>Choose the best expression for each sentence.</p>
+<div id="complete"></div>
+<button onclick="checkComplete()">Check Answers</button>
+<div id="completeFeedback" class="feedback"></div>
+<button onclick="go(5)">Final Challenge →</button>
+</div>
+
+<div id="screen5" class="hidden">
+<h2>🏁 Final Challenge</h2>
+<div class="question">
+<p><b>The students created a new plan and then ______ it for one month.</b></p>
+<label><input type="radio" name="final" value="find out"> find out</label><br>
+<label><input type="radio" name="final" value="carry out"> carry out</label><br>
+<label><input type="radio" name="final" value="pay attention to"> pay attention to</label>
+</div>
+<button onclick="finish()">Finish Activity</button>
+<div id="result"></div>
+</div>
+</div>
+</div>
+
+<script>
+const expressions=[
+"find out","set up","sort out","pay attention to","come up with","carry out"
+];
+let total=0;
+
+function go(n){
+ document.querySelectorAll('[id^="screen"]').forEach(x=>x.classList.add('hidden'));
+ document.getElementById('screen'+n).classList.remove('hidden');
+ document.getElementById('bar').style.width=(n*20)+'%';
+ window.scrollTo(0,0);
+}
+
+const meanings=[
+["discover or learn something","find out"],
+["start or arrange something","set up"],
+["separate things into groups","sort out"],
+["watch or listen carefully","pay attention to"],
+["think of an idea or plan","come up with"],
+["do or complete a plan","carry out"]
+];
+
+document.getElementById('match').innerHTML=meanings.map((m,i)=>`
+<div class="question"><b>${i+1}. ${m[0]}</b><br>
+<select id="m${i}"><option value="">Choose...</option>
+${expressions.map(e=>`<option>${e}</option>`).join('')}
+</select></div>`).join('');
+
+function checkMatch(){
+ let correct=0;
+ meanings.forEach((m,i)=>{if(document.getElementById('m'+i).value===m[1])correct++});
+ total+=correct;
+ document.getElementById('matchFeedback').textContent=`You got ${correct}/6 correct!`;
+}
+
+const context=[
+["The teacher wanted to ______ how much paper students used.","find out",["find out","set up","carry out"]],
+["They decided to ______ recycling boxes near the cafeteria.","set up",["sort out","set up","come up with"]],
+["Please ______ the paper and plastic before throwing them away.","sort out",["sort out","find out","pay attention to"]],
+["Students should ______ the recycling signs.","pay attention to",["carry out","pay attention to","set up"]]
+];
+document.getElementById('context').innerHTML=context.map((q,i)=>`
+<div class="question"><b>${i+1}. ${q[0]}</b><br>
+${q[2].map(o=>`<label><input type="radio" name="c${i}" value="${o}"> ${o}</label><br>`).join('')}</div>`).join('');
+
+function checkContext(){
+ let correct=0;
+ context.forEach((q,i)=>{
+  let a=document.querySelector(`input[name="c${i}"]:checked`);
+  if(a&&a.value===q[1])correct++;
+ });
+ total+=correct;
+ document.getElementById('contextFeedback').textContent=`You got ${correct}/4 correct!`;
+}
+
+const complete=[
+["The team ______ a fun points game.","come up with"],
+["They asked students to ______ their waste carefully.","sort out"],
+["The class decided to ______ the recycling plan.","carry out"],
+["We need to ______ more information about the project.","find out"],
+["Please ______ to the instructions.","pay attention to"]
+];
+document.getElementById('complete').innerHTML=complete.map((q,i)=>`
+<div class="question"><b>${i+1}. ${q[0]}</b><br>
+<select id="p${i}"><option value="">Choose...</option>
+${expressions.map(e=>`<option>${e}</option>`).join('')}
+</select></div>`).join('');
+
+function checkComplete(){
+ let correct=0;
+ complete.forEach((q,i)=>{if(document.getElementById('p'+i).value===q[1])correct++});
+ total+=correct;
+ document.getElementById('completeFeedback').textContent=`You got ${correct}/5 correct!`;
+}
+
+function finish(){
+ let a=document.querySelector('input[name="final"]:checked');
+ let finalCorrect=a&&a.value==="carry out";
+ if(finalCorrect)total++;
+ document.getElementById('result').innerHTML=`
+ <p class="score">${finalCorrect?"🎉 Correct!":"Not quite!"}</p>
+ <p>Your final answer: <b>${a?a.value:"No answer"}</b></p>
+ <p>Remember: <b>carry out</b> = do or complete a plan.</p>
+ <p><b>Quick Review:</b> find out · set up · sort out · pay attention to · come up with · carry out</p>`;
+}
+</script>
+</body>
+</html>
